@@ -99,8 +99,8 @@ function buildSelects() {
 
 function buildFields() {
   const wrap = $('fieldSwatches');
-  const names = { mustard: 'Mustard', red: 'Red', teal: 'Teal', bone: 'Bone' };
-  const colors = { mustard: '#e9a319', red: '#d42b1e', teal: '#0f6e6a', bone: '#f2ead8' };
+  const names = { mustard: 'Mustard', red: 'Red', teal: 'Clay', bone: 'Bone' };
+  const colors = { mustard: '#e9a319', red: '#d42b1e', teal: '#7a4a3c', bone: '#f2ead8' };
   for (const f of Object.keys(names)) {
     const b = document.createElement('button');
     b.type = 'button';
@@ -124,7 +124,8 @@ function applyLayoutDefaults(layout) {
   state.tagline = d.tagline;
   if (d.photoId) state.photoId = d.photoId;
   if (layout === 'B') state.photo2Id = 'protective-woman';
-  if (layout === 'C') state.photo2Id = 'protective-woman';
+  // Layout C no longer uses photo2Id (its small photo was removed), so
+  // switching to C leaves it untouched.
 }
 
 document.querySelectorAll('#layoutSeg button').forEach((b) => {

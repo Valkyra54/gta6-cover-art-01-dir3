@@ -9,7 +9,7 @@ import { coverRect, containRect } from './photos.js';
 export const FIELDS = {
   mustard: { field: '#e9a319', ink: '#14101f', paper: '#f6efdd', title: '#14101f', tag: '#14101f' },
   red: { field: '#d42b1e', ink: '#14101f', paper: '#f6efdd', title: '#f6efdd', tag: '#f6efdd' },
-  teal: { field: '#0f6e6a', ink: '#14101f', paper: '#f6efdd', title: '#f6efdd', tag: '#f6efdd' },
+  teal: { field: '#7a4a3c', ink: '#14101f', paper: '#f6efdd', title: '#f6efdd', tag: '#f6efdd' },
   bone: { field: '#f2ead8', ink: '#14101f', paper: '#ffffff', title: '#14101f', tag: '#14101f' },
 };
 

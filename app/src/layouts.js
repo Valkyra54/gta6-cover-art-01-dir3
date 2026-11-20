@@ -152,59 +152,63 @@ export function layoutB(ctx, W, H, state, A) {
   finish(ctx, W, H, state);
 }
 
-// C — Giant shadow. The poster's joke is scale: a tiny real man stands at
-// the foot of his own shadow, the shadow lying long across a flat teal
-// field. The shadow is the ink-only print of the same walking man, rotated
-// almost flat and thinned to a long streak — a real long shadow is a
-// streak, not a standing figure.
+// C — Giant shadow. The poster's joke is scale: one giant ink
+// silhouette of the woman stands upright and fills the field, with her
+// long shadow lying flat from its feet, the way the Wolf poster's giant
+// silhouette throws its shadow. The silhouette IS the figure, so it
+// reads as her; the streak only has to read as a long shadow. No small
+// photo at its foot — the figure alone carries the poster.
 export function layoutC(ctx, W, H, state, A) {
   const pal = FIELDS[state.field];
-  const accent = state.neon ? accentFor(state) : '#ffb347';
   paintField(ctx, W, H, state);
   const wide = W > H * 1.2;
   const portrait = H > W * 1.15;
 
-  // The shadow: the ink print, rotated ~68° so the figure lies along the
-  // ground, thinned across its width, feet anchored where the small man
-  // stands.
+  // The shadow streak: the ink print, rotated almost flat, anchored at
+  // the silhouette's feet and running right along the ground, long
+  // enough to leave the frame. Drawn BEFORE the standing silhouette, so
+  // the silhouette's base covers its left end and the streak reads as
+  // cast by the giant figure. Source-cropped like the silhouette, so the
+  // stray neon flecks at the print's edges never enter the poster.
   const feetX = W * 0.08; const feetY = H * 0.88;
-  const figH = wide ? H * 0.8 : portrait ? H * 0.7 : H * 0.7;
-  const figW = W * 0.3;
-  const angle = wide ? 1.22 : 1.19;
+  const shH = wide ? W * 0.62 : H * 0.85;
+  const shW = shH * 0.45;
+  const shAngle = 1.45;
   ctx.save();
   ctx.imageSmoothingEnabled = false;
   ctx.translate(feetX, feetY);
-  ctx.rotate(angle);
-  ctx.scale(0.34, 1.0);
+  ctx.rotate(shAngle);
+  ctx.scale(0.3, 1.0);
   ctx.globalAlpha = 0.92;
-  ctx.drawImage(A.mainInk, -figW / 2, -figH, figW, figH);
+  ctx.drawImage(A.mainInk, 24, 0, 432, 960, -shW / 2, -shH, shW, shH);
   ctx.restore();
 
-  // The small real man at the foot of the shadow, clipped to his box.
-  const sh = wide ? H * 0.3 : H * 0.24;
-  const sw = sh * 0.5;
-  const sx = W * 0.07; const sy = H * 0.88 - sh;
+  // The giant standing silhouette: the same ink figure, upright, its long
+  // coat hem on the ground line at 0.88H, the silhouette filling the
+  // empty upper half. The print is source-cropped (x 24..456): the chroma cut catches a few flecks
+  // of the photo's neon background at the print's left edge and right
+  // edge, and uncropped they float on the field as dirt.
+  const figH = wide ? H * 0.8 : H * 0.78;
+  const figW = figH * 0.45;
   ctx.save();
-  ctx.imageSmoothingEnabled = true;
-  const sbox = { x: sx, y: sy, w: sw, h: sh };
-  ctx.beginPath();
-  ctx.rect(sbox.x, sbox.y, sbox.w, sbox.h);
-  ctx.clip();
-  const sr = coverRect(A.secondGraded, sbox, sampleById(state.photo2Id).focus, null);
-  ctx.drawImage(A.secondGraded, sr.dx, sr.dy, sr.dw, sr.dh);
+  ctx.imageSmoothingEnabled = false;
+  ctx.globalAlpha = 0.96;
+  ctx.drawImage(A.mainInk, 24, 0, 432, 960, W * 0.02, feetY - figH, figW, figH);
   ctx.restore();
 
   // Title, right side — top on wide, mid-height otherwise, clear of the
-  // shadow's head.
+  // shadow's head. C never takes the neon accent echo: the Sunset pink is
+  // a third hue that fights the warm field, so the
+  // title stays cream with only drawTitle's own neutral dark drop shadow.
   const bx = W * 0.44; const bw = W * 0.52;
   const ty = wide ? 0.1 : portrait ? 0.2 : 0.36;
   drawTagline(ctx, state.tagline, bx, H * ty, bw, pal.tag, Math.round(H * 0.032));
   drawTitle(ctx, state.caption, { x: bx, y: H * (ty + 0.02), w: bw, h: H * 0.2 },
-    pal.title, accent, state.neon, Math.round(H * 0.15));
+    pal.title, '', false, Math.round(H * 0.15));
   // Credits sit at the very bottom (y 0.95), like layouts A and B: the
-  // shadow streak crosses y ~0.66 in the credits' x-range, so a mid-height
-  // credits line always collides with it. Down here the streak is long
-  // gone (it rises rightward from the feet at y 0.88, x 0.08).
+  // shadow streak runs along y ~0.78-0.88 in the credits' x-range, so a
+  // mid-height credits line would collide with it. Down here the streak
+  // has left the frame (it rises rightward from the feet and exits right).
   drawCredits(ctx, creditsLine(), bx, H * 0.95, bw, pal.tag, Math.round(H * 0.016));
   finish(ctx, W, H, state);
 }
